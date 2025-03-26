@@ -30,6 +30,8 @@ class WhoAmIGame:
 
         # Bind the Escape key to close the window
         self.root.bind("<Escape>", lambda event: self.root.destroy())
+        
+        self.first_message = ""
 
     # Function to start the game
     def start_game(self):
@@ -99,13 +101,16 @@ class WhoAmIGame:
     def show_game_screen(self):
         self.clear_frame()  # Clear all previous widgets
         Controller = controler.Controller()
-        Controller.start_game(self.mode)
+        self.first_message = Controller.start_game(self.mode)
         # Display the player's name
         tk.Label(self.root, text=f"Player: {self.player_name}", font=("Arial", 16), anchor="w").place(
             x=10, y=self.root.winfo_screenheight() - 40)
 
-        # Display the question
-        self.question_label = tk.Label(self.frame, text= Controller.ai_game(self.last_button_pressed), font=("Arial", 24, "bold"))
+        if self.first_message != "":
+            self.question_label = tk.Label(self.frame, text=self.first_message, font=("Arial", 24, "bold"),wraplength=self.root.winfo_width() - 50)
+            self.first_message = ""
+        else:
+            self.question_label = tk.Label(self.frame, text= Controller.play_game(self.last_button_pressed), font=("Arial", 24, "bold"),wraplength=self.root.winfo_width() - 50)
         self.question_label.pack(pady=20)
 
         # Frame for answer buttons
@@ -169,7 +174,7 @@ class WhoAmIGame:
                                              command=self.question_handle)
         self.submit_guess_button.pack(pady=10)
 
-        tk.Label(self.frame, text=Controller.player_game(self.question), font=("Arial", 20)).pack(pady=10)
+        tk.Label(self.frame, text=Controller.play_game(self.question), font=("Arial", 20)).pack(pady=10)
         # Button for "Guessed it Correct"
         self.guess_correct_button = tk.Button(self.frame, text="Guessed it Correct", font=("Arial", 20),
                                               command=self.show_result)
