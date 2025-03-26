@@ -8,9 +8,7 @@ class ChatAPI:
         self.model = "1 - Llama3 405 on WestAI with 4b quantization"
         self.key = key
         self.url = url
-        self.chat_history = [
-            {"role": "system", "content": "Du bist ein hilfreicher Assistent."}
-        ]
+        self.chat_history = []
 
     def send_message(self, user_input):
         """
@@ -36,7 +34,7 @@ class ChatAPI:
         if response.status_code == 200:
             response_data = response.json()
             assistant_reply = response_data["choices"][0]["message"]["content"]
-            print(f"Assistent: {assistant_reply}")
+            #print(f"Assistent: {assistant_reply}")
 
             # Save the assistant's reply in the chat history
             self.chat_history.append({"role": "assistant", "content": assistant_reply})

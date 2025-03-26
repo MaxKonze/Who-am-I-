@@ -1,10 +1,12 @@
 import api
 import json
+import os
 
 class Controller():
     def __init__(self):
         self.game = ""
         self.api = None
+        self.load_api()
         self.intial_prompt_ai = (
             "Think of a famous person, either real or fictional. This person can be from any field, including movies, TV, "
             "music, literature, history, or any other area of public interest. Your task is to respond to user questions "
@@ -15,22 +17,25 @@ class Controller():
             "**Important Rule:** You must choose a character beforehand and stick to it, without changing or adjusting the "
             "character based on the user's questions. Your answers should be based solely on the characteristics of the "
             "pre-chosen person. In the first answer you are committed to tell me the character's name.\n\n"
-            "Go ahead and ask your first question!"
+            "Go ahead and ask your first question! \n\n"
+            "PLease only answer in english."
         )
         
     def load_api(self):
-        with open("config.json", "r") as file:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        config_path = os.path.join(script_dir, "config.json")
+        with open(config_path, "r") as file:
             config = json.load(file)
-        self.api_key = config["APi-Key"]
-        self.url = config["URL"]
+        self.api_key = config["API-KEY"]
+        self.url = config["API-URL"]
         
         self.api = api.ChatAPI(self.api_key, self.url)
 
     def start_game(self, game_type):
         if game_type == "AI":
             self.game = "AI"
-            api.send_request(self.intial_prompt_ai)
-            return(api.send_request("Let's start the game!"))            
+            self.api.send_message(self.intial_prompt_ai)
+            return(self.api.send_message("Let's start the game!"))            
         else:
             self.game = "Player"
     
@@ -41,7 +46,7 @@ class Controller():
             self.player_game(prompt)
     
     def ai_game(self, prompt):
-        response = self.api.send_request(prompt)
+        response = self.api.send_message(prompt)
         return response
         
     def player_game(self):

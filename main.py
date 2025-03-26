@@ -98,7 +98,7 @@ class WhoAmIGame:
     # Function to show the game screen
     def show_game_screen(self):
         self.clear_frame()  # Clear all previous widgets
-        Controller = controler.Controller(self.mode)
+        Controller = controler.Controller()
         Controller.start_game(self.mode)
         # Display the player's name
         tk.Label(self.root, text=f"Player: {self.player_name}", font=("Arial", 16), anchor="w").place(
