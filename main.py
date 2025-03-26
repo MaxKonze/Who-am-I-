@@ -1,4 +1,5 @@
 import tkinter as tk
+import controler
 
 
 # The class that implements the game
@@ -97,13 +98,14 @@ class WhoAmIGame:
     # Function to show the game screen
     def show_game_screen(self):
         self.clear_frame()  # Clear all previous widgets
-
+        Controller = controler.Controller(self.mode)
+        Controller.start_game(self.mode)
         # Display the player's name
         tk.Label(self.root, text=f"Player: {self.player_name}", font=("Arial", 16), anchor="w").place(
             x=10, y=self.root.winfo_screenheight() - 40)
 
         # Display the question
-        self.question_label = tk.Label(self.frame, text="[API-Text comes here]", font=("Arial", 24, "bold"))
+        self.question_label = tk.Label(self.frame, text= Controller.ai_game(self.last_button_pressed), font=("Arial", 24, "bold"))
         self.question_label.pack(pady=20)
 
         # Frame for answer buttons
@@ -141,14 +143,20 @@ class WhoAmIGame:
     # Function to show the result if the AI guesses correctly
     def show_result(self):
         self.clear_frame()  # Clear previous widgets
-        tk.Label(self.frame, text=f"{self.player_name} was guessed in {self.tries} tries!",
+        if self.mode == "AI":
+            tk.Label(self.frame, text=f"{self.player_name} was guessed in {self.tries} tries!",
                  font=("Arial", 24, "bold")).pack(pady=20)
-        tk.Button(self.frame, text="Exit", font=("Arial", 20), command=self.root.destroy).pack(pady=20)
+            tk.Button(self.frame, text="Exit", font=("Arial", 20), command=self.root.destroy).pack(pady=20)
+        elif self.mode == "Player":
+            tk.Label(self.frame, text=f"The correct name was guessed in {self.tries} tries!",
+                     font=("Arial", 24, "bold")).pack(pady=20)
+            tk.Button(self.frame, text="Exit", font=("Arial", 20), command=self.root.destroy).pack(pady=20)
 
     # Function to show the player guess screen
     def show_player_guess_screen(self):
         self.clear_frame()  # Clear previous widgets
-
+        Controller = controler.Controller()
+        Controller.start_game(self.mode)
         tk.Label(self.frame, text="Guess what the AI is thinking!", font=("Arial", 24, "bold")).pack(pady=20)
 
         # Player's input for guesses
@@ -161,6 +169,7 @@ class WhoAmIGame:
                                              command=self.question_handle)
         self.submit_guess_button.pack(pady=10)
 
+        tk.Label(self.frame, text=Controller.player_game(self.question), font=("Arial", 20)).pack(pady=10)
         # Button for "Guessed it Correct"
         self.guess_correct_button = tk.Button(self.frame, text="Guessed it Correct", font=("Arial", 20),
                                               command=self.show_result)
