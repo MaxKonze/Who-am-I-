@@ -189,7 +189,7 @@ class WhoAmIGame:
         self.question = self.player_input.get()  # Speichert die eingegebene Frage
         self.increment_tries()
         print(self.question) # Test
-
+        self.show_player_guess_screen()  # Zeigt das Spieler-Guess-Screen erneut
 
     # Function to enable/disable the submit guess button
     def on_player_entry_change(self, event):

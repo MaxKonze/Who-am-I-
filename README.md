@@ -1,5 +1,8 @@
 # Who-am-I-
 
+## IMPORTANT !!
+Only the AI-guess version works 
+
 ## Overview
 **Who-am-I-** is an interactive game where users try to guess a famous person, real or fictional, by asking a series of yes-or-no questions. The game is powered by an AI backend that provides logical and consistent answers based on the character's attributes.
 
