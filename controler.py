@@ -7,7 +7,7 @@ class Controller():
         self.game = ""
         self.api = None
         self.load_api()
-        self.intial_prompt_ai = (
+        self.intial_prompt_player = (
             "Think of a famous person, either real or fictional. This person can be from any field, including movies, TV, "
             "music, literature, history, or any other area of public interest. Your task is to respond to user questions "
             "about the character you are thinking of. You should only answer each question with either 'Yes' or 'No', and "
@@ -19,6 +19,10 @@ class Controller():
             "pre-chosen person. In the first answer you are committed to tell me the character's name.\n\n"
             "Go ahead and ask your first question! \n\n"
             "PLease only answer in english."
+        )
+        self.intial_prompt_ai = (
+            "I want to play 'Who am I' with you."
+            "Please ask me yes or no question but please do not add commenst to your question."
         )
         
     def load_api(self):
@@ -38,6 +42,8 @@ class Controller():
             return(self.api.send_message("Let's start the game!"))            
         else:
             self.game = "Player"
+            self.api.send_message(self.intial_prompt_player)	
+            return(self.api.send_message("Let's start the game!"))
     
     def play_game(self, prompt):
         if self.game == "AI":
@@ -49,8 +55,9 @@ class Controller():
         response = self.api.send_message(prompt)
         return response
         
-    def player_game(self):
-        pass
+    def player_game(self,prompt):
+        response = self.api.send_message(prompt)
+        return response
         
     def reset_game(self):
         self.game = ""

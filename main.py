@@ -32,6 +32,8 @@ class WhoAmIGame:
         self.root.bind("<Escape>", lambda event: self.root.destroy())
         
         self.first_message = ""
+        
+        self.Controller = controler.Controller()
 
     # Function to start the game
     def start_game(self):
@@ -100,8 +102,7 @@ class WhoAmIGame:
     # Function to show the game screen
     def show_game_screen(self):
         self.clear_frame()  # Clear all previous widgets
-        Controller = controler.Controller()
-        self.first_message = Controller.start_game(self.mode)
+        self.first_message = self.Controller.start_game(self.mode)
         # Display the player's name
         tk.Label(self.root, text=f"Player: {self.player_name}", font=("Arial", 16), anchor="w").place(
             x=10, y=self.root.winfo_screenheight() - 40)
@@ -110,7 +111,8 @@ class WhoAmIGame:
             self.question_label = tk.Label(self.frame, text=self.first_message, font=("Arial", 24, "bold"),wraplength=self.root.winfo_width() - 50)
             self.first_message = ""
         else:
-            self.question_label = tk.Label(self.frame, text= Controller.play_game(self.last_button_pressed), font=("Arial", 24, "bold"),wraplength=self.root.winfo_width() - 50)
+            print("request send ")
+            self.question_label = tk.Label(self.frame, text= self.Controller.play_game(self.last_button_pressed), font=("Arial", 24, "bold"),wraplength=self.root.winfo_width() - 50)
         self.question_label.pack(pady=20)
 
         # Frame for answer buttons
@@ -140,6 +142,8 @@ class WhoAmIGame:
         self.last_button_pressed = button_value  # Save the button that was last pressed
         self.increment_tries()  # Increment the number of tries
         print(f"'{button_value}' button was pressed.")  # Test
+        self.first_message = ""
+        self.show_game_screen()  # Show the game screen again
 
     # Function to increase the number of tries
     def increment_tries(self):
@@ -160,8 +164,8 @@ class WhoAmIGame:
     # Function to show the player guess screen
     def show_player_guess_screen(self):
         self.clear_frame()  # Clear previous widgets
-        Controller = controler.Controller()
-        Controller.start_game(self.mode)
+        
+        self.Controller.start_game(self.mode)
         tk.Label(self.frame, text="Guess what the AI is thinking!", font=("Arial", 24, "bold")).pack(pady=20)
 
         # Player's input for guesses
@@ -174,7 +178,7 @@ class WhoAmIGame:
                                              command=self.question_handle)
         self.submit_guess_button.pack(pady=10)
 
-        tk.Label(self.frame, text=Controller.play_game(self.question), font=("Arial", 20)).pack(pady=10)
+        tk.Label(self.frame, text=self.Controller.play_game(self.question), font=("Arial", 20)).pack(pady=10)
         # Button for "Guessed it Correct"
         self.guess_correct_button = tk.Button(self.frame, text="Guessed it Correct", font=("Arial", 20),
                                               command=self.show_result)
